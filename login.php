@@ -28,6 +28,7 @@
                     $firstName = $row['firstName'];
                     $lastName = $row['lastName'];
                     $email = $row['email'];
+                    $username = $row['username'];
 
                     if (password_verify($user['password'], $row['hashed_password'])) {
                         $secret_key = $configs['secret-key'];
@@ -35,7 +36,7 @@
                         $audience_claim = "THE_AUDIENCE";
                         $issuedAt_claim = time();
                         $notBefore_claim = $issuedAt_claim + 10;
-                        $expire_claim = $issuedAt_claim + 60;
+                        $expire_claim = $issuedAt_claim + 60 * 60;
                         $token = array(
                             "iss" => $issuer_claim,
                             "aud" => $audience_claim,
@@ -57,12 +58,9 @@
                                 "message" => "Successful Login",
                                 "jwt" => $jwt,
                                 "email" => $email,
-                                "expireAt" => $expire_claim
+                                "expireAt" => $expire_claim,
+                                "username" => $username
                             ));
-
-                        $name = $row['firstName'];
-                        $username = $row['username'];
-                        $message = "Logged in successfully";
                         
                     } else {
                         http_response_code(401);
